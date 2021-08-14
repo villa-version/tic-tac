@@ -3,6 +3,8 @@ import pygame, sys
 
 CELL_SIZE = 100
 CELL_NUMBER = 3
+SIGN_ZERO = 'o'
+SIGN_CROSS = 'x'
 
 
 class Object:
@@ -51,7 +53,7 @@ class MainController:
         self.copied_grid = self.grid
         self.zeros = []
         self.crosses = []
-        self.progress = 'Zero'
+        self.progress = SIGN_ZERO
 
     def update(self):
         self.draw_elements()
@@ -88,17 +90,17 @@ class MainController:
                     if block.occupied != '':
                         pass
                     else:
-                        if self.progress == 'Zero':
-                            self.progress = 'Cross'
+                        if self.progress == SIGN_ZERO:
+                            self.progress = SIGN_CROSS
                             self.spawn_zero(block.x, block.y)
-                            block.occupied = 'o'
-                        elif self.progress == 'Cross':
-                            self.progress = 'Zero'
+                            block.occupied = SIGN_ZERO
+                        elif self.progress == SIGN_CROSS:
+                            self.progress = SIGN_ZERO
                             self.spawn_cross(block.x, block.y)
-                            block.occupied = 'x'
+                            block.occupied = SIGN_CROSS
 
     def check_win(self):
-        for sign in ('x', 'o'):
+        for sign in (SIGN_CROSS, SIGN_ZERO):
             for col in range(CELL_NUMBER):
                 if self.grid[col][0].occupied == sign and self.grid[col][1].occupied == sign and self.grid[col][2].occupied == sign:
                     return sign
@@ -112,8 +114,9 @@ class MainController:
 
 
 def main():
+    name = "Tic-Tac"
     screen = pygame.display.set_mode((CELL_SIZE * CELL_NUMBER, CELL_SIZE * CELL_NUMBER))
-    pygame.display.set_caption("Tic-Tac")
+    pygame.display.set_caption(name)
 
     main_controller = MainController(screen)
 
@@ -126,11 +129,11 @@ def main():
                 m_pos = pygame.mouse.get_pos()
                 main_controller.check_press_on_area(m_pos[0], m_pos[1])
                 result = main_controller.check_win()
-                if result == 'x':
+                if result == SIGN_CROSS:
                     print('CROSS WON')
                     pygame.quit()
                     sys.exit()
-                elif result == 'o':
+                elif result == SIGN_ZERO:
                     print('ZEROS WON')
                     pygame.quit()
                     sys.exit()
