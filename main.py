@@ -46,7 +46,7 @@ class MainController:
     def __init__(self, screen):
         self.screen = screen
         self.grid = []
-        self.grid_busy_blocks = []
+        self.ocupied_blocks = []
         self.spawn_grid()
         self.zeros = []
         self.crosses = []
@@ -58,7 +58,7 @@ class MainController:
     def draw_elements(self):
         for block in self.grid:
             block.draw()
-        for block in self.grid_busy_blocks:
+        for block in self.ocupied_blocks:
             block.draw()
         for zero in self.zeros:
             zero.draw()
@@ -77,15 +77,15 @@ class MainController:
             for x in r:
                 self.grid.append(Grid(x, y, self.screen))
 
-    def spawn_grid_busy_blocks(self, x, y):
-        self.grid_busy_blocks.append(Grid(x, y, self.screen))
+    def spawn_ocupied_blocks(self, x, y):
+        self.ocupied_blocks.append(Grid(x, y, self.screen))
 
     def check_press_on_area(self, mx, my):
         for block in self.grid[:]:
             x = block.x * CELL_SIZE
             y = block.y * CELL_SIZE
             if x < mx < x + CELL_SIZE and y < my < y + CELL_SIZE:
-                self.spawn_grid_busy_blocks(block.x, block.y)
+                self.spawn_ocupied_blocks(block.x, block.y)
                 if self.progress == 'Zero':
                     self.progress = 'Cross'
                     self.spawn_zero(block.x, block.y)
