@@ -14,10 +14,6 @@ class Object:
         self.vec = pygame.math.Vector2(self.x, self.y)
         self.screen = screen
 
-    def draw(self):
-        obj = pygame.Rect(int(self.vec.x * CELL_SIZE), int(self.vec.y * CELL_SIZE), CELL_SIZE - 10, CELL_SIZE - 10)
-        pygame.draw.rect(self.screen, (255, 213, 0), obj)
-
 
 class Grid(Object):
     def __init__(self, x, y, screen, occupied):
@@ -36,13 +32,23 @@ class Zero(Object):
         Object.__init__(self, x, y, screen)
 
     def draw(self):
-        obj = pygame.Rect(int(self.vec.x * CELL_SIZE), int(self.vec.y * CELL_SIZE), CELL_SIZE - 10, CELL_SIZE - 10)
-        pygame.draw.ellipse(self.screen, (111, 111, 222), obj)
+        pygame.draw.circle(self.screen, (111, 111, 222),
+                           ((self.vec.x + 1/2) * CELL_SIZE - 5, (self.vec.y + 1/2) * CELL_SIZE - 5),
+                           CELL_SIZE/2 - 5)
+        # (self.vec.x + 1/2) * CELL_SIZE = self.vec.x * CELL_SIZE + CELL_SIZE/2
 
 
 class Cross(Object):
     def __init__(self, x, y, screen):
         Object.__init__(self, x, y, screen)
+
+    def draw(self):
+        pygame.draw.line(self.screen, (0, 0, 0),
+                         (self.vec.x * CELL_SIZE, self.vec.y * CELL_SIZE),
+                         (self.vec.x * CELL_SIZE + CELL_SIZE - 10, self.vec.y * CELL_SIZE + CELL_SIZE - 10))
+        pygame.draw.line(self.screen, (0, 0, 0),
+                         (self.vec.x * CELL_SIZE + CELL_SIZE - 10, self.vec.y * CELL_SIZE),
+                         (self.vec.x * CELL_SIZE, self.vec.y * CELL_SIZE + CELL_SIZE - 10))
 
 
 class MainController:
@@ -79,7 +85,7 @@ class MainController:
             self.grid.append([])
         for y in r:
             for x in r:
-                self.grid[y].append(Grid(x, y, self.screen, ""))
+                self.grid[y].append(Grid(x, y, self.screen, ''))
 
     def check_press_on_area(self, mx, my):
         for row in self.grid[:]:
